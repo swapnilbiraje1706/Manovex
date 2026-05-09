@@ -480,6 +480,7 @@ section {
 
 .pricing-card {
   width: min(100%, 760px);
+  scroll-margin-top: 120px;
   padding: 32px;
   border: 1px solid var(--border);
   border-radius: 18px;
@@ -1993,6 +1994,42 @@ footer {
   gap: 10px;
 }
 
+.paid-feature-lock {
+  display: grid;
+  gap: 12px;
+  max-width: 760px;
+  margin: 0 auto 24px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--card) 94%, transparent);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.paid-feature-lock h3 {
+  color: var(--text);
+  font-size: 22px;
+}
+
+.paid-feature-lock p {
+  max-width: 560px;
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+body.pro-active .paid-feature-lock {
+  display: none;
+}
+
+body:not(.pro-active) #brainSection .journey-grid,
+body:not(.pro-active) #webImportSection #mv-feature-05-mount,
+body:not(.pro-active) #trainingSection .labs-grid,
+body:not(.pro-active) #quizSection #mv-feature-07-mount {
+  display: none;
+}
+
 .feature-action-row {
   display: flex;
   flex-wrap: wrap;
@@ -3094,7 +3131,7 @@ footer {
     <div class="nav-right" id="navRight">
       <button class="btn btn-ghost btn-sm" onclick="scrollToLibrary()">Free Library</button>
       <button class="btn btn-ghost btn-sm" onclick="scrollToUpload()">My Documents</button>
-      <button class="btn btn-ghost btn-sm" onclick="scrollToProTools()">Features</button>
+      <button class="btn btn-ghost btn-sm" onclick="handleFeatureNav()">Features</button>
       <button class="btn btn-ghost btn-sm" onclick="scrollToPricing()">Payment</button>
       <button class="btn btn-primary btn-sm" onclick="openModal('auth')">Sign In</button>
     </div>
@@ -3110,8 +3147,8 @@ footer {
       <div class="hero-cta">
         <button class="btn btn-primary" onclick="openSampleReader()">Try free sample text</button>
         <button class="btn btn-ghost" onclick="scrollToUpload()">Upload your book</button>
-        <button class="btn btn-ghost" onclick="scrollToProTools()">See paid features</button>
-        <button class="btn btn-ghost" onclick="scrollToWpmTest()">Test your speed free</button>
+        <button class="btn btn-ghost" onclick="handleFeatureNav()">See paid features</button>
+        <button class="btn btn-ghost" onclick="handlePaidFeatureShortcut('wpm')">Open speed test</button>
       </div>
     </div>
   </section>
@@ -3122,9 +3159,9 @@ footer {
       <h2 class="section-title">Upload a book, then <span>speed read</span></h2>
       <p class="section-sub">Two steps for the main Manovex Pro workflow: upload your file, then click Read to open the fast reader. Page selection, title, and text tools sit inside the reader.</p>
       <div class="feature-action-row">
-        <button class="btn btn-primary" type="button" onclick="scrollToProTools()">Use all paid features</button>
-        <button class="btn btn-ghost" type="button" onclick="scrollToBrain()">Dyslexia & brain quiz</button>
-        <button class="btn btn-ghost" type="button" onclick="scrollToTraining()">Training & streaks</button>
+        <button class="btn btn-primary" type="button" onclick="handleFeatureNav()">Use all paid features</button>
+        <button class="btn btn-ghost" type="button" onclick="handlePaidFeatureShortcut('brain')">Dyslexia & brain quiz</button>
+        <button class="btn btn-ghost" type="button" onclick="handlePaidFeatureShortcut('training')">Training & streaks</button>
       </div>
       <div class="upload-layout signed-out" id="uploadLayout">
         <div class="upload-panel signed-out-panel" id="uploadPanel">
@@ -3154,7 +3191,7 @@ footer {
               </div>
               <button class="btn btn-primary btn-full" id="uploadedReadButton" type="button" onclick="readLastUploadedDocument()" style="display:none">Read uploaded document</button>
               <div class="quick-upload-actions">
-                <button class="btn btn-ghost btn-full" type="button" onclick="openUrlImportModal()">Import from a web URL</button>
+                <button class="btn btn-ghost btn-full" type="button" onclick="handlePaidFeatureShortcut('web-import')">Import from a web URL</button>
                 <button class="btn btn-ghost btn-full" type="button" onclick="createTextDocumentInReader()">Paste text in reader</button>
               </div>
               <p class="quick-upload-note">PDF page thumbnails, title, and text tools are inside the reader's Document button.</p>
@@ -3387,8 +3424,13 @@ footer {
       <h2 class="section-title">Discover your reading pattern and tune the <span>reader</span></h2>
       <p class="section-sub">Personalize the reader before the first serious session with a short quiz, accessible typography, and comfortable spacing.</p>
       <div class="feature-action-row">
-        <button class="btn btn-primary" type="button" onclick="scrollToBrain()">Use brain quiz and dyslexia tools</button>
+        <button class="btn btn-primary" type="button" onclick="handlePaidFeatureShortcut('brain')">Use brain quiz and dyslexia tools</button>
         <button class="btn btn-ghost" type="button" onclick="handleProToolAction('settings')">Open reader settings</button>
+      </div>
+      <div class="paid-feature-lock">
+        <h3>Unlock reading personalization</h3>
+        <p>Brain type quiz, dyslexia-friendly font, spacing controls, and reader comfort profiles are included in Manovex Pro.</p>
+        <button class="btn btn-primary" type="button" onclick="scrollToPricing()">Unlock for $11/year</button>
       </div>
       <div class="journey-grid">
         <div id="mv-feature-09-mount"></div>
@@ -3403,8 +3445,13 @@ footer {
       <h2 class="section-title">Turn online articles into a clean <span>reader view</span></h2>
       <p class="section-sub">Paste a public article link or add copied text, then move straight into the focused Manovex reader.</p>
       <div class="feature-action-row">
-        <button class="btn btn-primary" type="button" onclick="openUrlImportModal()">Import article now</button>
+        <button class="btn btn-primary" type="button" onclick="handlePaidFeatureShortcut('web-import')">Import article now</button>
         <button class="btn btn-ghost" type="button" onclick="createTextDocumentInReader()">Paste text in reader</button>
+      </div>
+      <div class="paid-feature-lock">
+        <h3>Unlock article import</h3>
+        <p>Article import is a Pro feature. Activate the yearly plan to turn web articles and pasted text into focused reader sessions.</p>
+        <button class="btn btn-primary" type="button" onclick="scrollToPricing()">Unlock for $11/year</button>
       </div>
       <div id="mv-feature-05-mount"></div>
     </div>
@@ -3416,8 +3463,13 @@ footer {
       <h2 class="section-title">Train faster, then protect the <span>habit loop</span></h2>
       <p class="section-sub">Recommended sessions, streaks, personal bests, and milestones keep progress structured without clutter.</p>
       <div class="feature-action-row">
-        <button class="btn btn-primary" type="button" onclick="launchTrainingSession({ planId: 'beginner', targetWpm: 220, wordsPerStep: 1, rampOn: true, fontSize: 24 })">Start beginner training</button>
-        <button class="btn btn-ghost" type="button" onclick="scrollToTraining()">View training dashboard</button>
+        <button class="btn btn-primary" type="button" onclick="handleStartTrainingSession({ planId: 'beginner', targetWpm: 220, wordsPerStep: 1, rampOn: true, fontSize: 24 })">Start beginner training</button>
+        <button class="btn btn-ghost" type="button" onclick="handlePaidFeatureShortcut('training')">View training dashboard</button>
+      </div>
+      <div class="paid-feature-lock">
+        <h3>Unlock guided training</h3>
+        <p>Adaptive plans, streaks, XP, badges, milestones, and progress tracking are included in Manovex Pro.</p>
+        <button class="btn btn-primary" type="button" onclick="scrollToPricing()">Unlock for $11/year</button>
       </div>
       <div class="labs-grid">
         <div id="mv-feature-06-mount"></div>
@@ -3435,6 +3487,11 @@ footer {
         <button class="btn btn-primary" type="button" onclick="handleProToolAction('quiz')">Use comprehension quiz</button>
         <button class="btn btn-ghost" type="button" onclick="openSampleReader()">Read sample first</button>
       </div>
+      <div class="paid-feature-lock">
+        <h3>Unlock comprehension checks</h3>
+        <p>Post-reading quizzes and vocabulary review are available after activating Manovex Pro.</p>
+        <button class="btn btn-primary" type="button" onclick="scrollToPricing()">Unlock for $11/year</button>
+      </div>
       <div id="mv-feature-07-mount"></div>
     </div>
   </section>
@@ -3445,7 +3502,7 @@ footer {
       <h2 class="section-title">One simple <span>yearly plan</span></h2>
       <p class="section-sub">One annual payment unlocks your private library, every reading control, and a cleaner focused experience across free and uploaded books.</p>
       <div class="pricing-shell">
-        <div class="pricing-card">
+        <div class="pricing-card" id="pricingCard">
           <div class="pricing-kicker">Annual access</div>
           <h3 class="pricing-title" id="pricingTitle">Manovex Pro</h3>
           <p class="pricing-copy">Built for readers who want their own library inside the same distraction-light reader. One plan unlocks uploads, premium controls, and a full year of access.</p>
@@ -3799,6 +3856,7 @@ let subscriptionState = {
   status: "signed_out",
   loading: false,
   checkoutBusy: false,
+  checkoutError: "",
   currentPeriodEnd: null,
   subscriptionId: null
 };
@@ -4328,6 +4386,7 @@ function setUploadedReadButton(docId = "") {
 }
 
 function readLastUploadedDocument() {
+  if (!requireProAccess("uploaded documents")) return;
   if (!lastUploadedDocumentId) {
     toast("Upload a document first.");
     return;
@@ -5074,6 +5133,7 @@ async function signOut() {
     status: "signed_out",
     loading: false,
     checkoutBusy: false,
+    checkoutError: "",
     currentPeriodEnd: null,
     subscriptionId: null
   };
@@ -5087,7 +5147,7 @@ function onSignedIn(user, showToast = true) {
   document.getElementById("navRight").innerHTML =
     '<button class="btn btn-ghost btn-sm" onclick="scrollToLibrary()">Free Library</button>' +
     '<button class="btn btn-ghost btn-sm" onclick="scrollToUpload()">My Documents</button>' +
-    '<button class="btn btn-ghost btn-sm" onclick="scrollToProTools()">Features</button>' +
+    '<button class="btn btn-ghost btn-sm" onclick="handleFeatureNav()">Features</button>' +
     '<button class="btn btn-ghost btn-sm" onclick="scrollToPricing()">Payment</button>' +
     '<div class="user-pill"><div class="avatar">' + escapeHtml(initial) + '</div><span>' + escapeHtml(name) + '</span></div>' +
     '<button class="btn btn-ghost btn-sm" onclick="signOut()">Sign Out</button>';
@@ -5105,13 +5165,14 @@ function onSignedOut() {
   document.getElementById("navRight").innerHTML =
     '<button class="btn btn-ghost btn-sm" onclick="scrollToLibrary()">Free Library</button>' +
     '<button class="btn btn-ghost btn-sm" onclick="scrollToUpload()">My Documents</button>' +
-    '<button class="btn btn-ghost btn-sm" onclick="scrollToProTools()">Features</button>' +
+    '<button class="btn btn-ghost btn-sm" onclick="handleFeatureNav()">Features</button>' +
     '<button class="btn btn-ghost btn-sm" onclick="scrollToPricing()">Payment</button>' +
     '<button class="btn btn-primary btn-sm" onclick="openModal(\'auth\')">Sign In</button>';
   subscriptionState = {
     status: "signed_out",
     loading: false,
     checkoutBusy: false,
+    checkoutError: "",
     currentPeriodEnd: null,
     subscriptionId: null
   };
@@ -5127,6 +5188,7 @@ async function loadSubscriptionState() {
       status: "signed_out",
       loading: false,
       checkoutBusy: false,
+      checkoutError: "",
       currentPeriodEnd: null,
       subscriptionId: null
     };
@@ -5139,6 +5201,7 @@ async function loadSubscriptionState() {
     subscriptionState.status = "active";
     subscriptionState.loading = false;
     subscriptionState.checkoutBusy = false;
+    subscriptionState.checkoutError = "";
     subscriptionState.currentPeriodEnd = currentUser.app_metadata?.current_period_end || getLocalTestAdminPeriodEnd();
     subscriptionState.subscriptionId = "local-test-subscription";
     renderPricing();
@@ -5151,6 +5214,7 @@ async function loadSubscriptionState() {
     subscriptionState.status = "active";
     subscriptionState.loading = false;
     subscriptionState.checkoutBusy = false;
+    subscriptionState.checkoutError = "";
     subscriptionState.currentPeriodEnd = localVerifiedSubscription.currentPeriodEnd;
     subscriptionState.subscriptionId = localVerifiedSubscription.subscriptionId;
     renderPricing();
@@ -5188,6 +5252,7 @@ async function loadSubscriptionState() {
 
     const active = Array.isArray(data) && data.length ? data[0] : null;
     subscriptionState.status = active ? "active" : "inactive";
+    if (active) subscriptionState.checkoutError = "";
     subscriptionState.currentPeriodEnd = active?.current_period_end || null;
     subscriptionState.subscriptionId = active?.id || null;
   } catch (error) {
@@ -5230,8 +5295,8 @@ function renderProTools() {
 
   grid.innerHTML = PRO_TOOLS.map((tool) => {
     const locked = !active;
-    const state = loading ? "Checking" : active ? "Available" : currentUser ? "Needs Pro" : "Locked";
-    const cta = active ? tool.cta : currentUser ? "Unlock plan" : "Sign in";
+    const state = loading ? "Checking" : active ? "Available" : "Needs Pro";
+    const cta = active ? tool.cta : "Unlock plan";
     const disabled = loading ? " disabled aria-disabled=\"true\"" : "";
     return (
       '<article class="pro-tool-card' + (locked ? " locked" : "") + '">' +
@@ -5248,19 +5313,49 @@ function renderProTools() {
   }).join("");
 }
 
-function handleProToolAction(toolId) {
+function syncPaidAccessUi() {
+  document.body.classList.toggle("pro-active", hasActiveSubscription());
+}
+
+function requireProAccess(featureName = "this feature") {
   if (!currentUser) {
-    openModal("auth");
-    return;
+    scrollToPricing();
+    toast("Activate Manovex Pro to use " + featureName + ". Sign in from the payment card when you are ready.");
+    return false;
   }
   if (subscriptionState.loading) {
     toast("Checking your plan. Please wait a moment.");
-    return;
+    return false;
   }
   if (!hasActiveSubscription()) {
     scrollToPricing();
+    toast("Activate Manovex Pro to use " + featureName + ".");
+    return false;
+  }
+  return true;
+}
+
+function handleFeatureNav() {
+  if (!currentUser || !hasActiveSubscription()) {
+    scrollToPricing();
+    toast("Paid features unlock after activating Manovex Pro.");
     return;
   }
+  scrollToProTools();
+}
+
+function handlePaidFeatureShortcut(toolId) {
+  if (!requireProAccess(getProToolTitle(toolId))) return;
+  handleProToolAction(toolId);
+}
+
+function getProToolTitle(toolId) {
+  const tool = PRO_TOOLS.find((item) => item.id === toolId);
+  return tool ? tool.title : "this feature";
+}
+
+function handleProToolAction(toolId) {
+  if (!requireProAccess(getProToolTitle(toolId))) return;
 
   switch (toolId) {
     case "upload":
@@ -5301,6 +5396,14 @@ function handleProToolAction(toolId) {
   }
 }
 
+function setCheckoutError(message) {
+  subscriptionState.checkoutError = String(message || "").trim();
+  const status = document.getElementById("pricingStatus");
+  if (status && subscriptionState.checkoutError) {
+    status.textContent = "Checkout error: " + subscriptionState.checkoutError;
+  }
+}
+
 function renderPricing() {
   const localAmount = document.getElementById("pricingLocalAmount");
   const fxNote = document.getElementById("pricingFxNote");
@@ -5314,6 +5417,7 @@ function renderPricing() {
 
   cta.disabled = false;
   cta.removeAttribute("aria-disabled");
+  syncPaidAccessUi();
 
   if (!currentUser) {
     cta.textContent = "Start yearly plan";
@@ -5327,6 +5431,7 @@ function renderPricing() {
     cta.disabled = true;
     cta.setAttribute("aria-disabled", "true");
     status.textContent = "We are checking your current subscription status.";
+    syncPaidAccessUi();
     renderProTools();
     return;
   }
@@ -5336,6 +5441,7 @@ function renderPricing() {
     cta.disabled = true;
     cta.setAttribute("aria-disabled", "true");
     status.textContent = "Your payment screen is being prepared.";
+    syncPaidAccessUi();
     renderProTools();
     return;
   }
@@ -5345,12 +5451,15 @@ function renderPricing() {
     cta.disabled = true;
     cta.setAttribute("aria-disabled", "true");
     status.textContent = "Your Manovex Pro plan is active until " + formatSubscriptionDate(subscriptionState.currentPeriodEnd) + ".";
+    syncPaidAccessUi();
     renderProTools();
     return;
   }
 
   cta.textContent = "Get Manovex Pro for $11/year";
-  status.textContent = "One yearly package unlocks uploads, premium reader controls, and your private library.";
+  status.textContent = subscriptionState.checkoutError
+    ? "Checkout error: " + subscriptionState.checkoutError
+    : "One yearly package unlocks uploads, premium reader controls, and your private library.";
   legal.textContent = "Secure checkout. Your plan activates after a successful payment.";
   renderProTools();
 }
@@ -5409,21 +5518,29 @@ async function callSupabaseFunction(name, payload) {
 }
 
 async function callPaymentApi(path, payload) {
-  const response = await fetch(path, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
+  let response;
+  try {
+    response = await fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+  } catch (_error) {
+    throw new Error("Payment endpoint could not be reached. Confirm the Netlify functions are deployed.");
+  }
 
   let body = null;
+  let rawText = "";
   try {
-    body = await response.json();
+    rawText = await response.text();
+    body = rawText ? JSON.parse(rawText) : null;
   } catch (_error) {
     body = null;
   }
 
   if (!response.ok) {
-    throw new Error(body?.error || body?.message || "Payment request failed.");
+    const fallback = rawText && rawText.length < 180 ? rawText : "Payment request failed with status " + response.status + ".";
+    throw new Error(body?.error || body?.message || fallback);
   }
 
   return body;
@@ -5469,6 +5586,7 @@ async function startSubscriptionCheckout(source) {
     return;
   }
 
+  subscriptionState.checkoutError = "";
   subscriptionState.checkoutBusy = true;
   renderPricing();
   renderDocuments();
@@ -5532,7 +5650,8 @@ async function startSubscriptionCheckout(source) {
     subscriptionState.checkoutBusy = false;
     renderPricing();
     renderDocuments();
-    toast(error.message || "Unable to start checkout.");
+    setCheckoutError(error.message || "Unable to start checkout.");
+    toast(subscriptionState.checkoutError || "Unable to start checkout.");
   }
 }
 
@@ -5548,6 +5667,7 @@ async function verifyRazorpayPayment(order, paymentResponse) {
     subscriptionState.checkoutBusy = false;
     subscriptionState.status = "active";
     subscriptionState.loading = false;
+    subscriptionState.checkoutError = "";
     subscriptionState.currentPeriodEnd = localSubscription.currentPeriodEnd;
     subscriptionState.subscriptionId = localSubscription.subscriptionId;
     renderPricing();
@@ -5736,6 +5856,10 @@ function renderDocuments() {
 }
 
 async function handleDocumentFileChange(event) {
+  if (!requireProAccess("document uploads")) {
+    event.target.value = "";
+    return;
+  }
   const file = event.target.files && event.target.files[0];
   if (!file) return;
   const allowed = /\.(pdf|epub|txt|text|md|markdown|html|htm)$/i.test(file.name);
@@ -5851,6 +5975,7 @@ async function saveUploadedDocument() {
 }
 
 function openDocument(id, options = {}) {
+  if (!requireProAccess("your private library")) return;
   const doc = getDocuments().find((item) => item.id === id);
   if (!doc) return;
   if (!doc.content) {
@@ -5959,6 +6084,10 @@ function toggleReaderDocumentPanel(force) {
 }
 
 async function saveReaderDocumentChanges() {
+  if (!requireProAccess("document tools")) {
+    setReaderDocumentStatus("Activate Manovex Pro to edit and save private documents.", "error");
+    return;
+  }
   const titleInput = document.getElementById("readerDocumentTitle");
   const textInput = document.getElementById("readerDocumentText");
   if (!titleInput || !textInput) return;
@@ -6015,6 +6144,7 @@ async function saveReaderDocumentChanges() {
 }
 
 async function selectReaderDocumentPage(pageIndex) {
+  if (!requireProAccess("PDF page picker")) return;
   const doc = getCurrentReaderDocument();
   const pages = Array.isArray(doc?.pdfPages) ? doc.pdfPages : [];
   if (!doc || !pages.length) return;
@@ -6611,6 +6741,7 @@ function toggleReaderPlay() {
 }
 
 function changeReaderSpeed(delta) {
+  if (!requireProAccess("reader speed controls")) return;
   setReaderSpeed(readerWpm + delta);
   if (!readerPlaying) updateReaderFrame();
 }
@@ -6622,41 +6753,48 @@ function skipReader(amount) {
   if (readerPlaying) restartReaderTiming();
 }
 
+function runProReaderControl(featureName, action) {
+  if (!requireProAccess(featureName)) return;
+  action();
+}
+
 function bindReaderControls() {
   document.getElementById("readerPlayBtn").addEventListener("click", toggleReaderPlay);
   document.getElementById("speedUp").addEventListener("click", () => changeReaderSpeed(25));
   document.getElementById("speedDown").addEventListener("click", () => changeReaderSpeed(-25));
-  document.getElementById("speedRange").addEventListener("input", (event) => setReaderSpeed(event.target.value));
-  document.getElementById("speedPreset150").addEventListener("click", () => setReaderSpeed(150));
-  document.getElementById("speedPreset300").addEventListener("click", () => setReaderSpeed(300));
-  document.getElementById("speedPreset450").addEventListener("click", () => setReaderSpeed(450));
+  document.getElementById("speedRange").addEventListener("input", (event) => runProReaderControl("reader speed controls", () => setReaderSpeed(event.target.value)));
+  document.getElementById("speedPreset150").addEventListener("click", () => runProReaderControl("reader speed controls", () => setReaderSpeed(150)));
+  document.getElementById("speedPreset300").addEventListener("click", () => runProReaderControl("reader speed controls", () => setReaderSpeed(300)));
+  document.getElementById("speedPreset450").addEventListener("click", () => runProReaderControl("reader speed controls", () => setReaderSpeed(450)));
   document.getElementById("backTen").addEventListener("click", () => skipReader(-10));
   document.getElementById("forwardTen").addEventListener("click", () => skipReader(10));
-  document.getElementById("rampOnChip").addEventListener("click", () => setReaderRamp(true));
-  document.getElementById("rampOffChip").addEventListener("click", () => setReaderRamp(false));
-  document.getElementById("wordStep1").addEventListener("click", () => setReaderWordsPerStep(1));
-  document.getElementById("wordStep2").addEventListener("click", () => setReaderWordsPerStep(2));
-  document.getElementById("wordStep3").addEventListener("click", () => setReaderWordsPerStep(3));
-  document.getElementById("bionicOffChip").addEventListener("click", () => setReaderBionic(false));
-  document.getElementById("bionicOnChip").addEventListener("click", () => setReaderBionic(true));
+  document.getElementById("rampOnChip").addEventListener("click", () => runProReaderControl("gradual speed ramp", () => setReaderRamp(true)));
+  document.getElementById("rampOffChip").addEventListener("click", () => runProReaderControl("speed ramp controls", () => setReaderRamp(false)));
+  document.getElementById("wordStep1").addEventListener("click", () => runProReaderControl("multi-word flashes", () => setReaderWordsPerStep(1)));
+  document.getElementById("wordStep2").addEventListener("click", () => runProReaderControl("multi-word flashes", () => setReaderWordsPerStep(2)));
+  document.getElementById("wordStep3").addEventListener("click", () => runProReaderControl("multi-word flashes", () => setReaderWordsPerStep(3)));
+  document.getElementById("bionicOffChip").addEventListener("click", () => runProReaderControl("bionic reading mode", () => setReaderBionic(false)));
+  document.getElementById("bionicOnChip").addEventListener("click", () => runProReaderControl("bionic reading mode", () => setReaderBionic(true)));
   document.getElementById("bionicStrengthRange").addEventListener("input", (event) => {
-    setReaderBionicStrength(event.target.value);
+    runProReaderControl("bionic reading intensity", () => setReaderBionicStrength(event.target.value));
   });
-  document.getElementById("fontDownChip").addEventListener("click", () => changeReaderFontSize(-2));
-  document.getElementById("fontUpChip").addEventListener("click", () => changeReaderFontSize(2));
-  document.getElementById("blurOffChip").addEventListener("click", () => setReaderBlurMode("off"));
-  document.getElementById("blurLightChip").addEventListener("click", () => setReaderBlurMode("light"));
-  document.getElementById("blurStrongChip").addEventListener("click", () => setReaderBlurMode("strong"));
-  document.getElementById("readerThemeDarkChip").addEventListener("click", () => setReaderThemeMode("dark"));
-  document.getElementById("readerThemeLightChip").addEventListener("click", () => setReaderThemeMode("light"));
-  document.getElementById("readerThemeSepiaChip").addEventListener("click", () => setReaderThemeMode("sepia"));
+  document.getElementById("fontDownChip").addEventListener("click", () => runProReaderControl("font size controls", () => changeReaderFontSize(-2)));
+  document.getElementById("fontUpChip").addEventListener("click", () => runProReaderControl("font size controls", () => changeReaderFontSize(2)));
+  document.getElementById("blurOffChip").addEventListener("click", () => runProReaderControl("peripheral blur controls", () => setReaderBlurMode("off")));
+  document.getElementById("blurLightChip").addEventListener("click", () => runProReaderControl("peripheral blur controls", () => setReaderBlurMode("light")));
+  document.getElementById("blurStrongChip").addEventListener("click", () => runProReaderControl("peripheral blur controls", () => setReaderBlurMode("strong")));
+  document.getElementById("readerThemeDarkChip").addEventListener("click", () => runProReaderControl("reader themes", () => setReaderThemeMode("dark")));
+  document.getElementById("readerThemeLightChip").addEventListener("click", () => runProReaderControl("reader themes", () => setReaderThemeMode("light")));
+  document.getElementById("readerThemeSepiaChip").addEventListener("click", () => runProReaderControl("reader themes", () => setReaderThemeMode("sepia")));
   document.getElementById("readerQuizBtn").addEventListener("click", () => {
+    if (!requireProAccess("comprehension quizzes")) return;
     if (!readerCurrentText) return;
     setReaderQuizContext();
     closeReader();
     scrollToQuiz();
   });
   document.getElementById("readerSettingsBtn").addEventListener("click", (event) => {
+    if (!requireProAccess("premium reader settings")) return;
     event.stopPropagation();
     document.getElementById("readerDocumentPanel")?.classList.remove("open");
     toggleMusicPanel(false);
@@ -6666,6 +6804,7 @@ function bindReaderControls() {
     document.getElementById("readerSettingsPanel").classList.remove("open");
   });
   document.getElementById("readerDocumentBtn").addEventListener("click", (event) => {
+    if (!requireProAccess("document tools")) return;
     event.stopPropagation();
     toggleMusicPanel(false);
     toggleReaderDocumentPanel();
@@ -6673,23 +6812,29 @@ function bindReaderControls() {
   document.getElementById("readerDocumentCloseBtn").addEventListener("click", () => toggleReaderDocumentPanel(false));
   document.getElementById("readerDocumentSaveBtn").addEventListener("click", saveReaderDocumentChanges);
   document.getElementById("readerDocumentResetBtn").addEventListener("click", resetReaderDocumentFields);
-  document.getElementById("musicBtn").addEventListener("click", () => toggleMusicPanel());
+  document.getElementById("musicBtn").addEventListener("click", () => {
+    if (!requireProAccess("ambient focus music")) return;
+    toggleMusicPanel();
+  });
   document.getElementById("musicBackdrop").addEventListener("click", () => toggleMusicPanel(false));
-  document.getElementById("musicNowPlaying").addEventListener("click", () => toggleMusicPanel(true));
+  document.getElementById("musicNowPlaying").addEventListener("click", () => {
+    if (!requireProAccess("ambient focus music")) return;
+    toggleMusicPanel(true);
+  });
   document.getElementById("musicCloseBtn").addEventListener("click", () => toggleMusicPanel(false));
   document.getElementById("musicDoneBtn").addEventListener("click", () => toggleMusicPanel(false));
   document.getElementById("musicStopBtn").addEventListener("click", stopAmbient);
   document.getElementById("musicVolumeRange").addEventListener("input", (event) => {
-    setAmbientVolume(Number(event.target.value) / 100);
+    runProReaderControl("ambient focus music", () => setAmbientVolume(Number(event.target.value) / 100));
   });
   document.getElementById("textColorPicker").addEventListener("input", (event) => {
-    document.documentElement.style.setProperty("--reader-highlight-color", event.target.value);
+    runProReaderControl("reader color controls", () => document.documentElement.style.setProperty("--reader-highlight-color", event.target.value));
   });
   document.getElementById("bgColorPicker").addEventListener("input", (event) => {
-    document.documentElement.style.setProperty("--reader-highlight-bg", event.target.value);
+    runProReaderControl("reader color controls", () => document.documentElement.style.setProperty("--reader-highlight-bg", event.target.value));
   });
   document.getElementById("pivotColorPicker").addEventListener("input", (event) => {
-    document.documentElement.style.setProperty("--reader-pivot", event.target.value);
+    runProReaderControl("ORP color controls", () => document.documentElement.style.setProperty("--reader-pivot", event.target.value));
   });
   document.addEventListener("keydown", (event) => {
     if (document.getElementById("readerPage").style.display !== "block") return;
@@ -6773,6 +6918,7 @@ function updateWpmElapsed() {
 }
 
 function startWpmReading() {
+  if (!requireProAccess("WPM speed test")) return;
   const test = getSelectedWpmTest();
   wpmState.result = null;
   showWpmPanel("wpmReadingPanel");
@@ -6806,6 +6952,7 @@ function startWpmReading() {
 }
 
 function finishWpmReading() {
+  if (!requireProAccess("WPM speed test")) return;
   resetWpmTimers();
   wpmState.finishedAt = Date.now();
   const test = getSelectedWpmTest();
@@ -6853,6 +7000,7 @@ function renderWpmQuiz() {
 }
 
 function scoreWpmQuiz() {
+  if (!requireProAccess("WPM speed test")) return;
   const test = getSelectedWpmTest();
   let correct = 0;
   let unanswered = false;
@@ -7087,6 +7235,7 @@ function renderUrlImportPreview(data) {
 }
 
 async function fetchQuickImportedArticle() {
+  if (!requireProAccess("web article import")) return;
   const input = document.getElementById("urlImportInput");
   const rawUrl = input.value.trim();
   if (!rawUrl) {
@@ -7127,6 +7276,7 @@ async function fetchQuickImportedArticle() {
 }
 
 function openUrlImportModal() {
+  if (!requireProAccess("web article import")) return;
   document.getElementById("urlImportModal").classList.add("open");
   document.getElementById("urlImportInput").focus();
   renderUrlImportHistory();
@@ -7137,6 +7287,7 @@ function closeUrlImportModal() {
 }
 
 function readQuickImportedArticle() {
+  if (!requireProAccess("web article import")) return;
   if (!urlImportPreview) return;
   closeUrlImportModal();
   openReaderFromText(urlImportPreview.title, urlImportPreview.text, { sourceType: "web_article" });
@@ -7268,6 +7419,7 @@ function renderMusicTrackCards() {
         stopAmbient();
         return;
       }
+      if (!requireProAccess("ambient focus music")) return;
       try {
         await startAmbientTrack(track.id);
       } catch (error) {
@@ -7288,6 +7440,7 @@ function renderMusicTimers() {
     chip.className = "music-timer-chip" + (audioTimerMinutes === timer.minutes ? " active" : "");
     chip.textContent = timer.label;
     chip.addEventListener("click", () => {
+      if (!requireProAccess("ambient focus music")) return;
       audioTimerMinutes = timer.minutes;
       scheduleAmbientAutoStop();
       renderMusicTimers();
@@ -7351,6 +7504,7 @@ function stopAmbient() {
 }
 
 async function startAmbientTrack(trackId) {
+  if (!requireProAccess("ambient focus music")) return;
   stopAmbient();
   await resumeAudioContext();
   if (!audioContext || audioContext.state !== "running") {
@@ -7492,6 +7646,7 @@ function handleQuizGraded(payload) {
 }
 
 function launchTrainingSession(config) {
+  if (!requireProAccess("adaptive training plans")) return;
   const key = config.planId === "advanced" ? "advanced" : config.planId === "intermediate" ? "intermediate" : "beginner";
   const trainingText = TRAINING_TEXTS[key] || TRAINING_TEXTS.beginner;
   applyReaderPreset({
@@ -7504,6 +7659,10 @@ function launchTrainingSession(config) {
     sourceType: "training",
     training: config
   });
+}
+
+function handleStartTrainingSession(config) {
+  launchTrainingSession(config);
 }
 
 function mountFeatureModules() {
@@ -7824,7 +7983,12 @@ function scrollToProTools() {
 
 function scrollToPricing() {
   showReader(false);
-  setTimeout(() => document.getElementById("pricingSection").scrollIntoView({ behavior: "smooth" }), 50);
+  setTimeout(() => {
+    const card = document.getElementById("pricingCard");
+    const section = document.getElementById("pricingSection");
+    (card || section)?.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => document.getElementById("pricingCtaBtn")?.focus({ preventScroll: true }), 420);
+  }, 50);
 }
 
 function scrollToUpload() {
