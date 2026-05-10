@@ -1,2 +1,0 @@
-# Manovex
-Ultimate Fast Reader
